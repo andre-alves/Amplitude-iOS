@@ -22,7 +22,7 @@
 //
 
 #ifndef AMPLITUDE_DEBUG
-#define AMPLITUDE_DEBUG 0
+#define AMPLITUDE_DEBUG 1
 #endif
 
 #ifndef AMPLITUDE_LOG
@@ -358,6 +358,8 @@ static NSString *const SEQUENCE_NUMBER = @"sequence_number";
     __block BOOL success = YES;
     NSString *insertSQL = [NSString stringWithFormat:INSERT_EVENT, table, EVENT_FIELD];
 
+    AMPLITUDE_LOG(@"[AMPLITUDE] addEventToTable %@", event);
+
     success &= [self inDatabaseWithStatement:insertSQL block:^(sqlite3_stmt *stmt) {
         if (sqlite3_bind_text(stmt, 1, [event UTF8String], -1, SQLITE_STATIC) != SQLITE_OK) {
             AMPLITUDE_LOG(@"Failed to bind event text to insert statement for adding event to table %@", table);
@@ -448,6 +450,8 @@ static NSString *const SEQUENCE_NUMBER = @"sequence_number";
 - (BOOL)insertOrReplaceKeyValueToTable:(NSString *)table key:(NSString *)key value:(NSObject *)value {
     __block BOOL success = YES;
     NSString *insertSQL = [NSString stringWithFormat:INSERT_OR_REPLACE_KEY_VALUE, table, KEY_FIELD, VALUE_FIELD];
+
+    AMPLITUDE_LOG(@"[AMPLITUDE] insertOrReplaceKeyValueToTable %@", key);
 
     success &= [self inDatabaseWithStatement:insertSQL block:^(sqlite3_stmt *stmt) {
         success &= sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_STATIC) == SQLITE_OK;

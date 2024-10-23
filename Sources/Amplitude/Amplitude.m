@@ -674,6 +674,8 @@ static NSString *const APP_BUILD = @"app_build";
         timestamp = [NSNumber numberWithLongLong:[[self currentTime] timeIntervalSince1970] * 1000];
     }
 
+    AMPLITUDE_LOG(@"[AMPLITUDE] logEvent %@", eventType);
+
     // Create snapshot of all event json objects, to prevent deallocation crash
     eventProperties = [eventProperties copy];
     apiProperties = [apiProperties mutableCopy];
